@@ -23,9 +23,11 @@ class FriezePattern {
 		// handle options
 		this.options = options || {};
 		this.id = options.id || 'anonymous';
+		this.maxIterationsH = this.options.maxIterationsH;
 		// add styling options
 		this.stroke = options.stroke || DEFAULT_STROKE_COLOR;
 		this.strokeWidth = options.strokeWidth || DEFAULT_STROKE_WIDTH;
+		this.fill = options.fill || 'white';
 
 		this.draw();
 	}
@@ -56,15 +58,15 @@ class FriezePattern {
 	Make paperSet 'clickable'
 	*/
 	addPaperSetHandlers() {
-		var self = this;
+		let self = this;
 		
 		self.paperSet.attr({
 			'cursor': 'pointer',
 			// using fill so that handlers are not just on the lines, but also the filled space
-			'fill': 'white',
+			'fill': self.fill,
 		});
         self.paperSet.forEach(function(elt, index) {
-			var mouseUpHandler = self.paperSetItemMouseUp.bind(self, index);
+			let mouseUpHandler = self.paperSetItemMouseUp.bind(self, index);
             elt.mouseover(self.paperSetItemMouseOver);
             elt.mouseout(function() { elt.attr({opacity: 1}); });
             elt.mouseup(mouseUpHandler);
@@ -113,7 +115,7 @@ class FriezePattern {
 		// transform it to be at offsetX
 		// apply generators to get the Set to translate
 		// Translate until at end of page
-		var _drawCallback = function(paperSet) {
+		let _drawCallback = function(paperSet) {
 			paperSet.forEach(function(elt, index) {
 				this.paperSet.push(elt);
 			}.bind(this));

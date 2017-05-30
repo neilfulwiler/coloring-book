@@ -48,7 +48,8 @@ function drawInCanvasCenter(paper, drawFunction, functionOptions, options) {
     origin.Y = origin.Y - (bottomMargin/2);
 
     // initialize the pathSet that will be returned
-    var pathSet = paper.set();
+    let pathSet = paper.set();
+
     if (options.inscribed)
         // Inscribe shape within another shape.
         // Inscribing shape drawn first so that shape sits on top.
@@ -62,7 +63,13 @@ function drawInCanvasCenter(paper, drawFunction, functionOptions, options) {
     // Draw the main shape
     // The returned pathSet is either a path or a set of paths
     let mainPath = drawFunction(paper, origin, size, functionOptions, false);
-    //styleShapePath(drawFunction(paper, origin, size, functionOptions, false));
+    // style the main path appropriately
+    if (options['stroke-dasharray'])
+        mainPath.attr({'stroke-dasharray': options['stroke-dasharray']});
+
+    if (options.fill) // fill is an integer mapping to array index
+        mainPath.attr('fill', COLORING_FILL_ARRAY[options.fill]);
+
     pathSet.push(mainPath);
 
     // if there is text to draw, draw it underneath
